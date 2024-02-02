@@ -1,12 +1,10 @@
 #!/usr/bin/python3
-
-import sys
-
-
 """
 method that determines if a given data set
 represents a valid UTF-8 encoding
 """
+
+import sys
 
 
 def validUTF8(data):
