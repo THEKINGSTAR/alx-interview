@@ -15,14 +15,10 @@ def pascal_triangle(n):
     if (n <= 0):
         return (pascal)
     else:
-        if n == 1:
-            pascal = [1]
-            return pascal
-        else:
-            for row in range(n):
-                rw_lst = [1] * (row + 1)
-                for c in range(1, row):
-                    rw_lst[c] = pascal[row - 1][c - 1] + pascal[row - 1][c]
-                pascal.append(rw_lst)
+        for row in range(n):
+            rw_lst = [1] * (row + 1)
+            for c in range(1, row):
+                rw_lst[c] = pascal[row - 1][c - 1] + pascal[row - 1][c]
+            pascal.append(rw_lst)
 
     return (pascal)
