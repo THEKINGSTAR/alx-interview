@@ -59,3 +59,4 @@ KeyboardInterrupt
 KeyboardInterrupt
 alexa@ubuntu:~/0x03-log_parsing$ 
 """
+# line = '210.163.77.203 - [2024-03-29 00:19:47.232268] "GET /projects/260 HTTP/1.1" 405 838'
