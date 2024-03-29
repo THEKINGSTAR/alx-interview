@@ -10,21 +10,9 @@ status codes should be printed in ascending order
 """
 
 
+from pickle import NONE
 import re
 import sys
-
-
-def if_match(input: str, regexp: str) -> str:
-    """
-    FUNCTION TO CHECK IF THE INPUT IS FOUND IN LINE OR NOT
-    """
-    match = re.search(regexp, input)
-    if match:
-        # print(f"Found: {match.group()}")
-        return match.group()
-    else:
-        # print("Pattern not found.")
-        return ''
 
 
 stus_cunt = {200: 0, 301: 0, 400: 0, 401: 0, 403: 0, 404: 0, 405: 0, 500: 0}
@@ -41,6 +29,29 @@ get_re = r' "GET \/projects\/260 HTTP\/1\.1" '
 std_in_line_re = re.compile(IP_Address_re + r' - '
                             + date_re + get_re + status_code_re
                             + r' ' + file_size_re)
+
+
+def if_match(input: str, regexp: str) -> str:
+    """
+    FUNCTION TO CHECK IF THE INPUT IS FOUND IN LINE OR NOT
+    """
+    match = re.search(regexp, input)
+    if match:
+        # print(f"Found: {match.group()}")
+        return match.group()
+    else:
+        # print("Pattern not found.")
+        return ''
+
+
+def print_statistics() -> None:
+    """
+    FUNCTION TO PRINT LINES
+    """
+    print(f"Total file size: {total_file_size}")
+    for code in sorted(stus_cunt.keys()):
+        if stus_cunt[code] > 0:
+            print(f"{code}: {stus_cunt[code]}")
 
 
 def output_metrics(line: str) -> None:
@@ -67,15 +78,16 @@ def output_metrics(line: str) -> None:
         line_count += 1
 
         if line_count % 10 == 0:
-            print(f"File size: {total_file_size}")
-            for code in sorted(stus_cunt.keys()):
-                if stus_cunt[code] > 0:
-                    print(f"{code}: {stus_cunt[code]}")
+            print_statistics()
 
 
 try:
     for line in sys.stdin:
         output_metrics(line)
+
+    if line_count % 10 != 0:
+        print_statistics()
+
 except KeyboardInterrupt:
     print(f"File size: {total_file_size}")
     for code in sorted(stus_cunt.keys()):
