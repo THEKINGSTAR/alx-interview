@@ -81,7 +81,6 @@ def output_metrics(line: str) -> None:
         if line_count % 10 == 0:
             print_statistics()
     else:
-        # Try extracting metrics from the line even if it doesn't fully match
         status_code = if_match(line, status_code_re)
         file_size = if_match(line, file_size_re)
         if file_size:
