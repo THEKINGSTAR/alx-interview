@@ -2,12 +2,9 @@
 """
 script that reads stdin line by line and computes metrics:
 (if the format is not this one, the line must be skipped)
-After every 10 lines and/or a keyboard interruption (CTRL + C),
+After every 10 lines and/or a keyboard interruption (CTRL + C)
 print these statistics from the beginning:
 Number of lines by status code:
-possible status code: 200, 301, 400, 401, 403, 404, 405 and 500
-if a status code doesnt appear or is not an integer,
-dont print anything for this status code
 format: <status code>: <number>
 status codes should be printed in ascending order
 """
@@ -27,7 +24,7 @@ def if_match(input: str, regexp: str) -> str:
         return match.group()
     else:
         # print("Pattern not found.")
-        return None
+        return ''
 
 
 stus_cunt = {200: 0, 301: 0, 400: 0, 401: 0, 403: 0, 404: 0, 405: 0, 500: 0}
@@ -46,7 +43,7 @@ std_in_line_re = re.compile(IP_Address_re + r' - '
                             + r' ' + file_size_re)
 
 
-def output_metrics(line):
+def output_metrics(line: str) -> None:
     """
     FUNCTION TO GET THE STD_IN AS INPUT
     AND
