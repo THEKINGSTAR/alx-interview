@@ -27,9 +27,9 @@ file_size_re = r'\d+$'
 get = " \"GET /projects/260 HTTP/1.1\" "
 get_re = r' "GET \/projects\/260 HTTP\/1\.1" '
 
-std_in_line_re = re.compile(IP_Address_re + r' - '
-                            + date_re + get_re + status_code_re
-                            + r' ' + file_size_re)
+std_in_line_re = re.compile(IP_Address_re + r' - ' +
+                            date_re + get_re + status_code_re +
+                            r' ' + file_size_re)
 
 
 def if_match(input: str, regexp: str) -> str:
