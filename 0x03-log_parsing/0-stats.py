@@ -22,7 +22,8 @@ line_count = 0
 IP_Address_re = r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}'
 date_re = r'\[\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}\.\d+\]'
 status_code_re = r'\b(200|301|400|401|403|404|405|500)\b'
-file_size_re = r'[0-9]{3}$'
+# file_size_re = r'[0-9]{3}$'
+file_size_re = r'\d+$'
 get = " \"GET /projects/260 HTTP/1.1\" "
 get_re = r' "GET \/projects\/260 HTTP\/1\.1" '
 
