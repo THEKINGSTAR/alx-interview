@@ -1,9 +1,14 @@
 #!/usr/bin/python3
 """
 script that reads stdin line by line and computes metrics:
+Input format: <IP Address> - [<date>] "GET /projects/260 HTTP/1.1"
+      <status code> <file size>
 (if the format is not this one, the line must be skipped)
 After every 10 lines and/or a keyboard interruption (CTRL + C),
 print these statistics from the beginning:
+Total file size: File size: <total size>
+where <total size> is the sum
+of all previous <file size> (see input format above)
 Number of lines by status code:
 possible status code: 200, 301, 400, 401, 403, 404, 405 and 500
 if a status code doesnt appear or is not an integer,
@@ -13,11 +18,17 @@ status codes should be printed in ascending order
 """
 
 
+from ast import If
+from csv import field_size_limit
+from ipaddress import ip_address
 import re
 import sys
+from typing import Union
+import difflib
+from more_itertools import difference
 
 
-def if_match(input: str, regexp: str) -> str:
+def if_match(input: str, regexp: str) -> Union[str, None]:
     """
     FUNCTION TO CHECK IF THE INPUT IS FOUND IN LINE OR NOT
     """
@@ -28,6 +39,16 @@ def if_match(input: str, regexp: str) -> str:
     else:
         # print("Pattern not found.")
         return None
+
+# Input format:
+# <IP Address>
+# -
+# [<date>]
+# "GET /projects/260 HTTP/1.1"
+# <status code>
+# <file size>
+# 210.163.77.203 - [2024-03-29 00:19:47.232268]\
+# "GET /projects/260 HTTP/1.1" 405 838
 
 
 stus_cunt = {200: 0, 301: 0, 400: 0, 401: 0, 403: 0, 404: 0, 405: 0, 500: 0}
@@ -44,6 +65,14 @@ get_re = r' "GET \/projects\/260 HTTP\/1\.1" '
 std_in_line_re = re.compile(IP_Address_re + r' - '
                             + date_re + get_re + status_code_re
                             + r' ' + file_size_re)
+
+# std_in_line = re.compile(IP_Address_re + ' - '
+# + date + get + status_code_re + ' ' + file_size_re )
+
+# print('Write a message and press Enter: ')
+# line = '210.163.77.203 - [2024-03-29 00:19:47.232268]\
+# "GET /projects/260 HTTP/1.1" 401 848'
+# output_metrics(line)
 
 
 def output_metrics(line):
@@ -64,6 +93,10 @@ def output_metrics(line):
         status_code = int(status_code)
         file_size = if_match(line, file_size_re)
         file_size = int(file_size)
+        """
+        print(f'Message from stdin: IP_ADRESS: {IP_Address}, DATE: {date},\
+            STATUS_CODE: {status_code}, FILSE_SIZE: {file_size}')
+        """
 
         total_file_size += file_size
         stus_cunt[status_code] += 1
