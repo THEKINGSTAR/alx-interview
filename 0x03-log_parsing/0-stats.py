@@ -42,7 +42,7 @@ def if_match(input: str, regexp: str) -> str:
         return match.group()
     else:
         # print("Pattern not found.")
-        return ''
+        return ""
 
 
 def print_statistics() -> None:
@@ -80,6 +80,21 @@ def output_metrics(line: str) -> None:
 
         if line_count % 10 == 0:
             print_statistics()
+    else:
+        # Try extracting metrics from the line even if it doesn't fully match
+        status_code = if_match(line, status_code_re)
+        file_size = if_match(line, file_size_re)
+        if file_size:
+            if status_code:
+                status_code = int(status_code)
+                stus_cunt[status_code] += 1
+
+            file_size = int(file_size)
+            total_file_size += file_size
+            line_count += 1
+
+        if line_count % 10 == 0:
+            print_statistics()
 
 
 try:
@@ -90,7 +105,4 @@ try:
         print_statistics()
 
 except KeyboardInterrupt:
-    print(f"File size: {total_file_size}")
-    for code in sorted(stus_cunt.keys()):
-        if stus_cunt[code] > 0:
-            print(f"{code}: {stus_cunt[code]}")
+    print_statistics()
