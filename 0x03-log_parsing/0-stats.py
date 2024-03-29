@@ -48,7 +48,7 @@ def print_statistics() -> None:
     """
     FUNCTION TO PRINT LINES
     """
-    print(f"Total file size: {total_file_size}")
+    print(f"File size: {total_file_size}")
     for code in sorted(stus_cunt.keys()):
         if stus_cunt[code] > 0:
             print(f"{code}: {stus_cunt[code]}")
