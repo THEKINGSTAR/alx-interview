@@ -10,6 +10,7 @@ status codes should be printed in ascending order
 """
 
 
+from distutils.errors import LibError
 from pickle import NONE
 import re
 import sys
@@ -97,8 +98,12 @@ def output_metrics(line: str) -> None:
 
 
 try:
-    for line in sys.stdin:
-        output_metrics(line)
+    if sys.stdin.isatty():
+        print(f"File size: {total_file_size}")
+        print_statistics()
+    else:
+        for line in sys.stdin:
+            output_metrics(line)
 
     if line_count % 10 != 0:
         print_statistics()
