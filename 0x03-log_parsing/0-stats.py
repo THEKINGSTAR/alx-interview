@@ -98,8 +98,6 @@ def output_metrics(line: str) -> None:
 
 
 try:
-    for line in sys.stdin:
-        output_metrics(line)
     if sys.stdin.isatty():
         print(f"File size: {total_file_size}")
         print_statistics()
