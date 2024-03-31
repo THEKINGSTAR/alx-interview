@@ -98,7 +98,12 @@ def output_metrics(line: str) -> None:
 
 
 try:
-    if sys.stdin.isatty() or len(sys.stdin.read()) == 0:
+    for line in sys.stdin:
+        output_metrics(line)
+    if sys.stdin.isatty():
+        print(f"File size: {total_file_size}")
+        print_statistics()
+    elif len(sys.stdin.read(1)) == 0:
         print_statistics()
     else:
         for line in sys.stdin:
@@ -106,9 +111,5 @@ try:
 
     if line_count % 10 != 0:
         print_statistics()
-
 except KeyboardInterrupt:
     print_statistics()
-
-except Exception as e:
-    print(f"stderr: {e}")
