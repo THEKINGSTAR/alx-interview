@@ -103,10 +103,17 @@ try:
         print_statistics()
     else:
         for line in sys.stdin:
-            output_metrics(line)
+            if not line:
+                print(f"File size: {total_file_size}")
+                print_statistics()
+            else:
+                output_metrics(line)
 
     if line_count % 10 != 0:
         print_statistics()
 
 except KeyboardInterrupt:
     print_statistics()
+
+except Exception as e:
+    print(f"{e}")
