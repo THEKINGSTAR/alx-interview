@@ -6,7 +6,7 @@ Display one character name per line in the same order as the “characters” li
 You must use the Star wars API
 You must use the request module
 */
-const request = require('request');
+const https = require('https');
 
 // COMMAND LINE ARGUMENTS
 const movieId = process.argv[2];
@@ -21,40 +21,54 @@ const url = `https://swapi-api.alx-tools.com/api/films/${movieId}/`;
 // Function to fetch character data
 const fetchCharacterData = characterUrl => {
     return new Promise((resolve, reject) => {
-        request.get(characterUrl, (error, response, body) => {
-            if (error) {
-                reject(error);
-            } else {
-                const character = JSON.parse(body);
+        https.get(characterUrl, (response) => {
+            let data = '';
+
+            // A chunk of data has been received.
+            response.on('data', (chunk) => {
+                data += chunk;
+            });
+
+            // The whole response has been received.
+            response.on('end', () => {
+                const character = JSON.parse(data);
                 resolve(character.name);
-            }
+            });
+        }).on("error", (error) => {
+            reject(error);
         });
     });
 };
 
 // Main function to fetch movie data and character names
 const fetchMovieData = () => {
-    request.get(url, (error, response, body) => {
-        if (error) {
-            console.error('Error fetching movie data:', error);
-            return;
-        }
-        
-        const film = JSON.parse(body);
-        // console.log("Characters in the movie:");
+    https.get(url, (response) => {
+        let data = '';
 
-        // Array to store promises for character data
-        const characterPromises = film.characters.map(characterUrl => fetchCharacterData(characterUrl));
+        // A chunk of data has been received.
+        response.on('data', (chunk) => {
+            data += chunk;
+        });
 
-        // Wait for all character data promises to resolve
-        Promise.all(characterPromises)
-            .then(characterNames => {
-                // Print character names in correct order
-                characterNames.forEach(name => console.log(name));
-            })
-            .catch(error => {
-                console.error('Error fetching character data:', error);
-            });
+        // The whole response has been received.
+        response.on('end', () => {
+            const film = JSON.parse(data);
+
+            // Array to store promises for character data
+            const characterPromises = film.characters.map(characterUrl => fetchCharacterData(characterUrl));
+
+            // Wait for all character data promises to resolve
+            Promise.all(characterPromises)
+                .then(characterNames => {
+                    // Print character names in correct order
+                    characterNames.forEach(name => console.log(name));
+                })
+                .catch(error => {
+                    console.error('Error fetching character data:', error);
+                });
+        });
+    }).on("error", (error) => {
+        console.error('Error fetching movie data:', error);
     });
 };
 
