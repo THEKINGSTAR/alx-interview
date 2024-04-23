@@ -42,16 +42,19 @@ const fetchMovieData = () => {
         
         const film = JSON.parse(body);
         // console.log("Characters in the movie:");
-        
-        // Iterate over character URLs
-        film.characters.forEach(async characterUrl => {
-            try {
-                const characterName = await fetchCharacterData(characterUrl);
-                console.log(characterName);
-            } catch (error) {
+
+        // Array to store promises for character data
+        const characterPromises = film.characters.map(characterUrl => fetchCharacterData(characterUrl));
+
+        // Wait for all character data promises to resolve
+        Promise.all(characterPromises)
+            .then(characterNames => {
+                // Print character names in correct order
+                characterNames.forEach(name => console.log(name));
+            })
+            .catch(error => {
                 console.error('Error fetching character data:', error);
-            }
-        });
+            });
     });
 };
 
